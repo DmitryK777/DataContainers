@@ -1,21 +1,31 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace DataContainers
 {
-	internal class ForwardList
+	internal class ForwardList:IEnumerable
 	{
 		Element Head;
 		public uint Size { get; private set; }
+
+
 
 		public ForwardList()
 		{
 			Head = null;
 			Size = 0;
 			Console.WriteLine($"ForwardListConstructor:\t {GetHashCode()}");
+		}
+
+		public ForwardList(int[] array)
+		{
+			for (int i = 0; i < array.Length; i++) push_back( array[i] );
 		}
 
 		~ForwardList()
@@ -32,6 +42,7 @@ namespace DataContainers
 		// Adding Elements
 		public void push_front(int Data)
 		{
+			/*
 			// 1) создаём новый элемент
 			Element New = new Element(Data);
 
@@ -40,6 +51,10 @@ namespace DataContainers
 
 			// 3) Смещаем голову на новый элемент
 			Head = New;
+			*/
+
+			Head = new Element(Data, Head);
+
 			Size++;
 		}
 
@@ -100,6 +115,20 @@ namespace DataContainers
 			}
 		}
 
+		public void erase(int index)
+		{
+			if (index > Size) return;
+
+			Element Temp = Head;
+			if (index == 0) pop_front();
+			else
+			{
+				for (int i = 0; i < index - 1; i++) Temp = Temp.pNext;
+				Temp.pNext = Temp.pNext.pNext;
+				Size--;
+			}
+		}
+
 		// Methods
 		public void Print()
 		{
@@ -109,9 +138,19 @@ namespace DataContainers
 			{
 				Console.Write($"{Temp.Data}\t");
 				Temp = Temp.pNext; // Переход на следующий элемент
-
 			}
 			Console.WriteLine();
 		}
+
+		public IEnumerator GetEnumerator()
+		{
+			return (IEnumerator)GetEnumerator();
+		}
+
+		public void Add(int value)
+		{
+			push_back(value);
+		}
+
 	}
 }

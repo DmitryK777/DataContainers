@@ -1,11 +1,12 @@
 ﻿#define BASE_CHECK
-//#define HOME_WORK
+#define HOME_WORK
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace DataContainers
 {
@@ -23,11 +24,12 @@ namespace DataContainers
 
 			for (int i = 0; i < n; i++)
 			{
-				list.push_back(rand.Next(100));
+				list.push_front(rand.Next(100));
 			}
 
 			list.Print();
 
+			/*
 			//list.pop_front();
 			//list.Print();
 
@@ -37,8 +39,7 @@ namespace DataContainers
 			//list.Clear();
 			//list.Print();
 
-			//list.
-
+			
 			Console.Write("Введите индекс добавляемого элемента: ");
 			int index = Convert.ToInt32(Console.ReadLine());
 			Console.Write("Введите значение добавляемого элемента: ");
@@ -46,11 +47,18 @@ namespace DataContainers
 
 			list.insert(value, index);
 			list.Print();
+			*/
+
+			Console.Write("Введите индекс удаляемого элемента: ");
+			int index = Convert.ToInt32(Console.ReadLine());
+			list.erase(index);
+			list.Print();
+
 #endif
 
 #if HOME_WORK
-			ForwardList list = new ForwardList() { 3, 5, 8, 13, 21 };
-			foreach (int i in list)
+			ForwardList new_list = new ForwardList() { 3, 5, 8, 13, 21 };
+			foreach (int i in new_list)
 			{
                 Console.Write(i + "\t");
             }

@@ -17,7 +17,7 @@ namespace DataContainers
 			this.pNext = pNext;
 			Console.WriteLine($"ElementConstructor:\t{GetHashCode()}");
 		}
-
+		
 		~Element()
 		{
 			Console.WriteLine($"ElementDestructor:\t{GetHashCode()}");
