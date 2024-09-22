@@ -13,7 +13,9 @@ namespace DataContainers
 	{
 		Element Head;
 		public uint Size { get; private set; }
+		public IEnumerator GetEnumerator() => Head;
 
+		public void Add(int Data) => push_back(Data);
 
 
 		public ForwardList()
@@ -108,9 +110,14 @@ namespace DataContainers
 			{
 				for (int i = 0; i < index - 1; i++) Temp = Temp.pNext;
 
+				/*
 				Element New = new Element(Data);
 				New.pNext = Temp.pNext;
 				Temp.pNext = New;
+				*/
+
+				Temp.pNext = new Element(Data, Temp.pNext);
+
 				Size++;
 			}
 		}
@@ -142,6 +149,7 @@ namespace DataContainers
 			Console.WriteLine();
 		}
 
+		/*
 		public IEnumerator GetEnumerator()
 		{
 			return (IEnumerator)GetEnumerator();
@@ -151,6 +159,9 @@ namespace DataContainers
 		{
 			push_back(value);
 		}
+		*/
+
+
 
 	}
 }

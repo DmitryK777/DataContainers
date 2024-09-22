@@ -1,4 +1,4 @@
-﻿#define BASE_CHECK
+﻿//#define BASE_CHECK
 #define HOME_WORK
 
 using System;
@@ -17,6 +17,7 @@ namespace DataContainers
 			Random rand = new Random(0);
 
 #if BASE_CHECK
+			
 			Console.Write($"Введите размер списка: ");
 			int n = Convert.ToInt32(Console.ReadLine());
 
@@ -29,7 +30,7 @@ namespace DataContainers
 
 			list.Print();
 
-			/*
+			
 			//list.pop_front();
 			//list.Print();
 
@@ -39,7 +40,7 @@ namespace DataContainers
 			//list.Clear();
 			//list.Print();
 
-			
+			/*
 			Console.Write("Введите индекс добавляемого элемента: ");
 			int index = Convert.ToInt32(Console.ReadLine());
 			Console.Write("Введите значение добавляемого элемента: ");
@@ -49,21 +50,24 @@ namespace DataContainers
 			list.Print();
 			*/
 
+			
 			Console.Write("Введите индекс удаляемого элемента: ");
 			int index = Convert.ToInt32(Console.ReadLine());
 			list.erase(index);
 			list.Print();
-
+			
 #endif
 
 #if HOME_WORK
 			ForwardList new_list = new ForwardList() { 3, 5, 8, 13, 21 };
+			new_list.Print();
+			
 			foreach (int i in new_list)
 			{
                 Console.Write(i + "\t");
             }
             Console.WriteLine();
-
+			
 #endif
 
 
