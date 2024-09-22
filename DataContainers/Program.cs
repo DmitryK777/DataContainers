@@ -59,7 +59,7 @@ namespace DataContainers
 #endif
 
 #if HOME_WORK
-			ForwardList new_list = new ForwardList() { 3, 5, 8, 13, 21 };
+			ForwardList<int> new_list = new ForwardList<int>() { 3, 5, 8, 13, 21 };
 			new_list.Print();
 			
 			foreach (int i in new_list)
@@ -67,7 +67,15 @@ namespace DataContainers
                 Console.Write(i + "\t");
             }
             Console.WriteLine();
-			
+
+			ForwardList<double> d_list = new ForwardList<double>() { 2.7, 3.4, 5.2, 8.3 };
+			foreach (double d in d_list) Console.Write(d + "\t");
+			Console.WriteLine();
+
+			ForwardList<string> s_list = new ForwardList<string>() { "Ах", "ты", "ж", "Ёжкин", "ты", "20" };
+			foreach (string s in s_list) Console.Write(s + "\t");
+			Console.WriteLine();
+
 #endif
 
 

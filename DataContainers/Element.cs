@@ -7,16 +7,12 @@ using System.Threading.Tasks;
 
 namespace DataContainers
 {
-	internal class Element
+	internal class Element<T>
 	{
-		public int Data { get; set; } // Значение элемента
-		public Element pNext { get; set; } // Следующий элемент
+		public T Data { get; set; } // Значение элемента
+		public Element<T> pNext { get; set; } // Следующий элемент
 
-		
-
-		
-
-		public Element(int data, Element pNext = null)
+		public Element(T data, Element<T> pNext = null)
 		{
 			this.Data = data;
 			this.pNext = pNext;

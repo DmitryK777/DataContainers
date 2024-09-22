@@ -9,13 +9,13 @@ using System.Collections;
 
 namespace DataContainers
 {
-	internal class ForwardList:IEnumerable
+	internal class ForwardList<T>:IEnumerable
 	{
-		Element Head;
+		Element<T> Head;
 		public uint Size { get; private set; }
-		public IEnumerator GetEnumerator() => new Enumerator(Head);
+		public IEnumerator GetEnumerator() => new Enumerator<T>(Head);
 
-		public void Add(int Data) => push_back(Data);
+		public void Add(T Data) => push_back(Data);
 
 
 		public ForwardList()
@@ -25,7 +25,7 @@ namespace DataContainers
 			Console.WriteLine($"ForwardListConstructor:\t {GetHashCode()}");
 		}
 
-		public ForwardList(int[] array)
+		public ForwardList(T[] array)
 		{
 			for (int i = 0; i < array.Length; i++) push_back( array[i] );
 		}
@@ -42,7 +42,7 @@ namespace DataContainers
 		}
 
 		// Adding Elements
-		public void push_front(int Data)
+		public void push_front(T Data)
 		{
 			/*
 			// 1) создаём новый элемент
@@ -55,22 +55,22 @@ namespace DataContainers
 			Head = New;
 			*/
 
-			Head = new Element(Data, Head);
+			Head = new Element<T>(Data, Head);
 
 			Size++;
 		}
 
-		public void push_back(int Data)
+		public void push_back(T Data)
 		{
 			if (Head == null) { push_front(Data); }
 			else
 			{
-				Element Temp = Head;
+				Element<T> Temp = Head;
 				while (Temp.pNext != null)
 				{
 					Temp = Temp.pNext;
 				}
-				Element New = new Element(Data);
+				Element<T> New = new Element<T>(Data);
 				Temp.pNext = New;
 			}
 			Size++;
@@ -89,7 +89,7 @@ namespace DataContainers
 			else if (Head.pNext == null) { Head = null; }
 			else
 			{
-				Element Temp = Head;
+				Element<T> Temp = Head;
 				while (Temp.pNext.pNext != null)
 				{
 					Temp = Temp.pNext;
@@ -100,11 +100,11 @@ namespace DataContainers
 			Size--;
 		}
 
-		public void insert(int Data, int index)
+		public void insert(T Data, int index)
 		{
 			if (index > Size) return;
 
-			Element Temp = Head;
+			Element<T> Temp = Head;
 			if (index == 0) push_front(Data);
 			else
 			{
@@ -116,7 +116,7 @@ namespace DataContainers
 				Temp.pNext = New;
 				*/
 
-				Temp.pNext = new Element(Data, Temp.pNext);
+				Temp.pNext = new Element<T>(Data, Temp.pNext);
 
 				Size++;
 			}
@@ -126,7 +126,7 @@ namespace DataContainers
 		{
 			if (index > Size) return;
 
-			Element Temp = Head;
+			Element<T> Temp = Head;
 			if (index == 0) pop_front();
 			else
 			{
@@ -139,7 +139,7 @@ namespace DataContainers
 		// Methods
 		public void Print()
 		{
-			Element Temp = Head; // Temp - это итератор (указатель при помощи которого можно получить доступ к элементам структуры данных)
+			Element<T> Temp = Head; // Temp - это итератор (указатель при помощи которого можно получить доступ к элементам структуры данных)
 
 			while (Temp != null)
 			{
