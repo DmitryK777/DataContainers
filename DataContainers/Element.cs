@@ -7,18 +7,12 @@ using System.Threading.Tasks;
 
 namespace DataContainers
 {
-	internal class Element:IEnumerator
+	internal class Element
 	{
 		public int Data { get; set; } // Значение элемента
 		public Element pNext { get; set; } // Следующий элемент
 
-		public object Current { get => pNext.Data; }
-		public bool MoveNext()
-		{
-			if(pNext != null) pNext = pNext.pNext;
-			return pNext != null;
-		}
-		public void Reset() { }
+		
 
 		
 

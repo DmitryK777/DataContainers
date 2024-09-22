@@ -13,7 +13,7 @@ namespace DataContainers
 	{
 		Element Head;
 		public uint Size { get; private set; }
-		public IEnumerator GetEnumerator() => Head;
+		public IEnumerator GetEnumerator() => new Enumerator(Head);
 
 		public void Add(int Data) => push_back(Data);
 
@@ -148,20 +148,5 @@ namespace DataContainers
 			}
 			Console.WriteLine();
 		}
-
-		/*
-		public IEnumerator GetEnumerator()
-		{
-			return (IEnumerator)GetEnumerator();
-		}
-
-		public void Add(int value)
-		{
-			push_back(value);
-		}
-		*/
-
-
-
 	}
 }
