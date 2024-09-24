@@ -17,17 +17,11 @@ namespace DataContainers
 
 		public void Add(int Data) => push_back(Data);
 
-
 		public ForwardList()
 		{
 			Head = null;
 			Size = 0;
 			Console.WriteLine($"ForwardListConstructor:\t {GetHashCode()}");
-		}
-
-		public ForwardList(int[] array)
-		{
-			for (int i = 0; i < array.Length; i++) push_back( array[i] );
 		}
 
 		~ForwardList()

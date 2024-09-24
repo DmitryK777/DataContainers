@@ -24,7 +24,6 @@ namespace DataContainers
 			Console.WriteLine($"EnumeratorDestructor:\t{GetHashCode()}");
 		}
 
-		public object Current { get => Temp.Data; }
 		public bool MoveNext()
 		{
 			//if (Temp == null) Temp = Head;
@@ -32,6 +31,8 @@ namespace DataContainers
 			Temp = Temp == null ? Head : Temp.pNext;
 			return Temp != null;
 		}
+
+		public object Current { get => Temp.Data; }
 
 		public void Reset() { Temp = null; }
 	}

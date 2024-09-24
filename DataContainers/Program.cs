@@ -67,7 +67,6 @@ namespace DataContainers
                 Console.Write(i + "\t");
             }
             Console.WriteLine();
-			
 #endif
 
 

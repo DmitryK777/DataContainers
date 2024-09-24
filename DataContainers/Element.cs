@@ -12,10 +12,6 @@ namespace DataContainers
 		public int Data { get; set; } // Значение элемента
 		public Element pNext { get; set; } // Следующий элемент
 
-		
-
-		
-
 		public Element(int data, Element pNext = null)
 		{
 			this.Data = data;
