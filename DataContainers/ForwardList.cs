@@ -25,11 +25,6 @@ namespace DataContainers
 			Console.WriteLine($"ForwardListConstructor:\t {GetHashCode()}");
 		}
 
-		public ForwardList(T[] array)
-		{
-			for (int i = 0; i < array.Length; i++) push_back( array[i] );
-		}
-
 		~ForwardList()
 		{
 			Console.WriteLine($"ForwardListDestructor:\t {GetHashCode()}");
