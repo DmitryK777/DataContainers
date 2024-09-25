@@ -14,30 +14,33 @@ using std::endl;
 #define CHECK_FOR
 //#define CHECK_CONCAT
 
-
+template<class T>
 class List
 {
-public: class Element
+	
+public: 
+	template<class T>
+	class Element
 	{
-		int Data;
+		T Data;
 		Element* pPrev;
 		Element* pNext;
 		
 
 		// Get Methods:
 	public:
-		int get_Data()const { return this->Data; }
+		T get_Data()const { return this->Data; }
 		Element* get_pPrev()const { return this->pPrev; }
 		Element* get_pNext()const { return this->pNext; }
 
 		// Set Methods:
-		void set_Data(int Data) { this->Data = Data; }
+		void set_Data(T Data) { this->Data = Data; }
 		void set_pPrev(Element* pPrev) { this->pPrev = pPrev; }
 		void set_pNext(Element* pNext) { this->pNext = pNext; }
 
 		// Constructors:
 	public:
-		Element(int Data, Element* pNext = nullptr, Element* pPrev = nullptr)
+		Element(T Data, Element* pNext = nullptr, Element* pPrev = nullptr)
 			:Data(Data), pNext(pNext), pPrev(pPrev)
 		{
 			
@@ -143,7 +146,7 @@ public:
 	{
 		Head = Tail = nullptr;
 		size = 0;
-		cout << "LConstructor" << this << endl;
+		cout << "ListConstructor" << this << endl;
 	}
 	
 	List(const List& other)
@@ -163,11 +166,11 @@ public:
 		other.Tail = nullptr;
 	}
 
-	List(std::initializer_list<int> list) 
+	List(std::initializer_list<T> list) 
 	{ 
-		for (int number : list)
+		for (T obj : list)
 		{
-			this->push_back(number);
+			this->push_back(obj);
 		}
 	}
 	
@@ -176,7 +179,7 @@ public:
 	{
 		//delete Head;
 		//delete Tail;
-		cout << "LDestructor" << this << endl;
+		cout << "ListDestructor" << this << endl;
 	}
 
 	
@@ -222,7 +225,7 @@ public:
 		return *this;
 	}
 
-	List& operator=(std::initializer_list<int> list)
+	List& operator=(std::initializer_list<T> list)
 	{
 		this->clear();
 		size = 0;
@@ -235,9 +238,9 @@ public:
 	}
 
 	// Type-Cast Operators
-	operator int*()
+	operator T*()
 	{
-		int* array = new int[this->size];
+		T* array = new T[this->size];
 		Element* Temp = this->Head;
 		for (int i = 0; i < this->size; i++)
 		{
@@ -248,7 +251,7 @@ public:
 	}
 
 	// Adding Elements
-	void push_front(int Data)
+	void push_front(T Data)
 	{
 		if (Head == nullptr && Tail == nullptr) Head = Tail = new Element(Data);
 		else
@@ -268,7 +271,7 @@ public:
 		size++;
 	}
 
-	void push_back(int Data)
+	void push_back(T Data)
 	{
 		if (Head == nullptr && Tail == nullptr) push_front(Data);
 		else
@@ -282,7 +285,7 @@ public:
 		
 	}
 
-	void insert(int Data, int index)
+	void insert(T Data, int index)
 	{
 		if (index > size) return;
 
@@ -406,18 +409,19 @@ public:
 };
 
 // Operators
-List operator+(List left, List right)
+template<typename T>
+List<T> operator+(List<T> left, List<T> right)
 {
-	List *list = new List();
+	List<T> *list = new List<T>();
 	
-	for (List::Element* Temp = left.get_Head(); Temp; Temp = Temp->get_pNext()) list->push_back(Temp->get_Data());
-	for (List::Element* Temp = right.get_Head(); Temp; Temp = Temp->get_pNext()) list->push_back(Temp->get_Data());
+	for (List<T>::Element* Temp = left.get_Head(); Temp; Temp = Temp->get_pNext()) list->push_back(Temp->get_Data());
+	for (List<T>::Element* Temp = right.get_Head(); Temp; Temp = Temp->get_pNext()) list->push_back(Temp->get_Data());
 
 	return *list;
 }
 
-
-std::ostream& operator<<(std::ostream& os, List::Element &element)
+template<typename T> 
+std::ostream& operator<<(std::ostream& os, List<T>::Element &element)
 {
 	return os << element.get_Data();
 }
@@ -461,7 +465,7 @@ void main()
 
 
 #if defined CHECK_FOR
-	List list1 = { 3, 5, 8, 13, 21 };
+	List<int> list1 = { 3, 5, 8, 13, 21 };
 	list1.print();
 
 	for (int i : list1) cout << i << tab;
@@ -471,10 +475,10 @@ void main()
 
 
 #if defined CHECK_CONCAT
-	List list2 = { 34, 55, 89 };
+	List<int> list2 = { 34, 55, 89 };
 	list2.print();
 
-	List list3 = list1 + list2;
+	List<int> list3 = list1 + list2;
 	list3.print();
 
 	//for (int i : list3) cout << i << tab;
