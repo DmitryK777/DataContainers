@@ -7,21 +7,19 @@ using std::endl;
 #define delimiter "\n-------------------------------------------"
 //#define DEBUG
 
-
-class List
+template<typename T> class List
 {
-	class Element
+    class Element
 	{
-		int Data;
+		T Data;
 		Element* pNext;
 		Element* pPrev;
 
 	public:
-		Element(int Data, Element* pNext = nullptr, Element* pPrev = nullptr)
+		Element(T Data, Element* pNext = nullptr, Element* pPrev = nullptr)
 			:Data(Data), pNext(pNext), pPrev(pPrev)
 		{
 			cout << "EConstructor:\t" << this << endl;
-
 		}
 
 		~Element()
@@ -45,7 +43,7 @@ class List
 
 		~ConstBaseIterator() {}
 
-		bool operator ==(const ConstBaseIterator& other)const
+		bool operator==(const ConstBaseIterator& other)const
 		{
 			return this->Temp == other.Temp;
 		}
@@ -77,8 +75,6 @@ public:
 #ifdef DEBUG
 			cout << "IteratorConstructor: \t" << this << endl;
 #endif // DEBUG
-
-			
 		}
 
 		~ConstIterator()
@@ -235,7 +231,7 @@ public:
 		cout << "LConstructor" << this << endl;
 	}
 
-	List(const std::initializer_list<int>& il) :List()
+	List(const std::initializer_list<T>& il) :List()
 	{
 		//cout << typeid(il.begin()) << endl;
 		for (int const* it = il.begin(); it != il.end(); it++) push_back(*it);
@@ -287,7 +283,7 @@ public:
 	}
 
 	// Adding Elements
-	void push_front(int Data)
+	void push_front(T Data)
 	{
 		if (Head == nullptr && Tail == nullptr) Head = Tail = new Element(Data);
 		else
@@ -308,14 +304,14 @@ public:
 		size++;
 	}
 
-	void push_back(int Data)
+	void push_back(T Data)
 	{
 		if (Head == nullptr && Tail == nullptr) return push_front(Data);
 		Tail = Tail->pNext = new Element(Data, nullptr, Tail);
 		size++;
 	}
 
-	void insert(int Data, int Index)
+	void insert(T Data, int Index)
 	{
 		if (Index == 0) return push_front(Data);
 		if (Index == size-1) return push_back(Data);
@@ -403,8 +399,8 @@ public:
 	}
 };
 
-
-List operator+(const List& left, const List& right)
+template<typename T>
+List<T> operator+(const List<T>& left, const List<T>& right)
 {
 	List buffer;
 	for (List::ConstIterator it = left.begin(); it != left.end(); ++it) buffer.push_back(*it);
@@ -483,16 +479,16 @@ void main()
 #endif
 
 
-	List list1 = { 3, 5, 8, 13, 21 };
-	List list2 = { 34, 55, 89 };
-	List list3 = list1 + list2;
+	List<int> list1 = { 3, 5, 8, 13, 21 };
+	List<int> list2 = { 34, 55, 89 };
+	List<int> list3 = list1 + list2;
 
 	for (int i : list1) cout << i << tab; cout << endl;
 	for (int i : list2) cout << i << tab; cout << endl;
 	for (int i : list3) cout << i << tab; cout << endl;
 
 
-	for (List::Iterator it = list1.begin(); it != list1.end(); ++it)
+	for (List<int>::Iterator it = list1.begin(); it != list1.end(); ++it)
 	{
 		*it *= 10;
 	}
