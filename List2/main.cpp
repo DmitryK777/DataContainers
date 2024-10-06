@@ -53,17 +53,10 @@ template<typename T> class List
 			return this->Temp != other.Temp;
 		}
 
-		int operator*()const
+		T operator*()const
 		{
 			return Temp->Data;
 		}
-
-		/*
-		int& operator*()
-		{
-			return Temp->Data;
-		}
-		*/
 	};
 
 public:
@@ -86,35 +79,33 @@ public:
 
 		ConstIterator& operator++() // Prefix increment
 		{
-			Temp = Temp->pNext;
+			ConstBaseIterator::Temp = ConstBaseIterator::Temp->pNext;
 			return *this;
 		}
 
 		ConstIterator operator++(int) // Postfix increment
 		{
-			ConstIterator old = Temp;
-			Temp = Temp->pNext;
+			ConstIterator old = ConstBaseIterator::Temp;
+			ConstBaseIterator::Temp = ConstBaseIterator::Temp->pNext;
 			return old;
 		}
 
 		ConstIterator& operator--() // Prefix increment
 		{
-			Temp = Temp->pPrev;
+			ConstBaseIterator::Temp = ConstBaseIterator::Temp->pPrev;
 			return *this;
 		}
 
 		ConstIterator operator--(int) // Postfix increment
 		{
-			ConstIterator old = Temp;
-			Temp = Temp->pPrev;
+			ConstIterator old = this->Temp;
+			this->Temp = this->Temp->pPrev;
 			return old;
 		}
 	};
 
 	class ConstReversIterator : public ConstBaseIterator
 	{
-		Element* Temp;
-
 	public:
 		ConstReversIterator(Element* Temp) : ConstBaseIterator(Temp)
 		{
@@ -132,27 +123,27 @@ public:
 
 		ConstReversIterator& operator++()
 		{
-			Temp = Temp->pPrev;
+			this->Temp = this->Temp->pPrev;
 			return *this;
 		}
 
 		ConstReversIterator operator++(int)
 		{
 			ConstReversIterator old = *this;
-			Temp = Temp->pPrev;
+			this->Temp = this->Temp->pPrev;
 			return old;
 		}
 
 		ConstReversIterator& operator--()
 		{
-			Temp = Temp->pNext;
+			this->Temp = this->Temp->pNext;
 			return *this;
 		}
 
 		ConstReversIterator operator--(int)
 		{
 			ConstReversIterator old = *this;
-			Temp = Temp->pNext;
+			this->Temp = this->Temp->pNext;
 			return old;
 		}
 	};
@@ -163,21 +154,21 @@ public:
 		Iterator(Element* Temp) : ConstIterator(Temp) {}
 		~Iterator() {}
 
-		int& operator*()
+		T& operator*()
 		{
-			return Temp->Data;
+			return this->Temp->Data;
 		}
 	};
 
-	class ReversIterator :public ConstIterator
+	class ReversIterator :public ConstReversIterator
 	{
 	public:
-		ReversIterator(Element* Temp) : ConstIterator(Temp) {}
+		ReversIterator(Element* Temp) : ConstReversIterator(Temp) {}
 		~ReversIterator() {}
 
-		int& operator*()
+		T& operator*()
 		{
-			return Temp->Data;
+			return this->Temp->Data;
 		}
 	};
 
@@ -234,16 +225,16 @@ public:
 	List(const std::initializer_list<T>& il) :List()
 	{
 		//cout << typeid(il.begin()) << endl;
-		for (int const* it = il.begin(); it != il.end(); it++) push_back(*it);
+		for (T const* it = il.begin(); it != il.end(); it++) push_back(*it);
 	}
 
-	List(const List& other) : List() // Без делегирования может падать программа
+	List(const List<T>& other) : List() // Без делегирования может падать программа
 	{
 		*this = other;
 		cout << "ListCopyConstructor" << this << endl;
 	}
 
-	List(const List&& other) : List() // Без делегирования может падать программа
+	List(const List<T>&& other) : List() // Без делегирования может падать программа
 	{
 		*this = std::move(other); // явный вызов MoveAssignment
 		cout << "ListAssignmentConstructor" << this << endl;
@@ -257,7 +248,7 @@ public:
 	}
 
 	// Operators
-	List& operator=(const List& other)
+	List<T>& operator=(const List<T>& other)
 	{
 		if (this == &other) return *this;
 
@@ -267,7 +258,7 @@ public:
 		return *this;
 	}
 
-	List& operator=(List&& other)
+	List<T>& operator=(List<T>&& other)
 	{
 		if (this == &other) return *this;
 		while (Head) pop_front();
@@ -299,7 +290,7 @@ public:
 			Head = New;
 			*/
 
-			Head = Head->pPrev = new Element(Data);
+			Head = Head->pPrev = new Element(Data, Head);
 		}
 		size++;
 	}
@@ -357,28 +348,6 @@ public:
 		size--;
 	}
 
-	void insert(int Index)
-	{
-		/*
-		if (Index == 0) return push_front(Data);
-		if (Index == size - 1) return push_back(Data);
-		if (Index >= size) throw std::exception("Insert: Out of range exception");
-
-		Element* Temp;
-		if (Index < size / 2)
-		{
-			Temp = Head;
-			for (int i = 0; i < Index; i++) Temp = Temp->pNext;
-		}
-		else
-		{
-			Temp = Tail;
-			for (int i = 0; i < size - Index - 1; i++) Temp = Temp->pPrev;
-		}
-		Temp->pNext->pPrev = Temp->pPrev->pNext = new Element(Data, Temp->pNext, Temp->pPrev);
-		size++;
-		*/
-	}
 
 	// Methods
 	void print()const
@@ -402,9 +371,9 @@ public:
 template<typename T>
 List<T> operator+(const List<T>& left, const List<T>& right)
 {
-	List buffer;
-	for (List::ConstIterator it = left.begin(); it != left.end(); ++it) buffer.push_back(*it);
-	for (List::ConstIterator it = right.begin(); it != right.end(); ++it)
+	List<T> buffer;
+	for (typename List<T>::ConstIterator it = left.begin(); it != left.end(); ++it) buffer.push_back(*it);
+	for (typename List<T>::ConstIterator it = right.begin(); it != right.end(); ++it)
 	{
 		buffer.push_back(*it);
 		//*it *= 10;
@@ -495,4 +464,12 @@ void main()
 
 	for (int i : list1) cout << i << tab; cout << endl;
 
+	List<double> d_list = { 2.7, 3.14, 5.4, 8.3 };
+	for (double i : d_list)cout << i << tab; cout << endl;
+
+	List<std::string> s_list = { "Хорошо", "живет", "на", "Свете", "Винни", "Пух" };
+	for (std::string i : s_list)cout << i << tab; cout << endl;
+	for (List<std::string>::ReversIterator it = s_list.rbegin(); it != s_list.rend(); ++it)
+		cout << *it << tab;
+	cout << endl;
 }
