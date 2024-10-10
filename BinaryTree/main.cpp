@@ -21,67 +21,19 @@ class Tree
 			cout << "ElementConstructor:\t" << this << endl;
 		}
 
-		/*
-		Element(const Element& other)
-		{
-			this->Data = other.Data;
-			this->pLeft = other.pLeft;
-			this->pRight = other.pRight;
-			cout << "ElementCopyConstructor:\t" << this << endl;
-		}
-
-		Element(Element&& other)
-		{
-			this->pLeft = nullptr;
-			this->pRight = nullptr;
-			delete this;
-
-			this->Data = other.Data;
-			this->pLeft = other.pLeft;
-			this->pRight = other.pRight;
-
-			other.pLeft = nullptr;
-			other.pRight = nullptr;
-			
-			cout << "ElementMoveConstructor:\t" << this << endl;
-		}
-		*/
-
 		~Element() { cout << "ElementDestructor:\t" << this << endl; }
 
 		// Operators
+
 		/*
-		Element& operator=(const Element& other)
+		int operator+(const Element& other)const
 		{
-			this->Data = other.Data;
-			this->pLeft = other.pLeft;
-			this->pRight = other.pRight;
-			cout << "ElementCopyAssignment:\t" << this << endl;
-		}
-		
-		Element& operator=(Element&& other)
-		{
-			this->pLeft = nullptr;
-			this->pRight = nullptr;
-			delete this;
-
-			this->Data = other.Data;
-			this->pLeft = other.pLeft;
-			this->pRight = other.pRight;
-
-			other.pLeft = nullptr;
-			other.pRight = nullptr;
-
-			cout << "ElementMoveAssignment:\t" << this << endl;
+			return this->Data + other.Data;
 		}
 		*/
 
-		
-
 		friend class Tree;
 	} *Root;
-
-	size_t size;
 
 public:
 	Element* getRoot()const { return Root; }
@@ -89,7 +41,6 @@ public:
 	Tree()
 	{
 		Root = nullptr;
-		size = 0;
 		cout << "TreeConstructor:\t" << this << endl;
 	}
 
@@ -110,10 +61,9 @@ public:
 			if (Root->pRight == nullptr) Root->pRight = new Element(Data);
 			else insert(Data, Root->pRight);
 		}
-		size++;
 	}
 
-	Element* minValue()
+	Element* minValue()const
 	{
 		Element* Temp = this->Root;
 		if (Temp == nullptr) return nullptr;
@@ -121,7 +71,7 @@ public:
 		return Temp;
 	}
 
-	Element* maxValue()
+	Element* maxValue()const
 	{
 		Element* Temp = this->Root;
 		if (Temp == nullptr) return nullptr;
@@ -129,7 +79,7 @@ public:
 		return Temp;
 	}
 
-	int count(const Element* Root)
+	int count(const Element* Root)const
 	{
 		int leftCount, rightCount;
 		if (Root != nullptr)
@@ -138,34 +88,118 @@ public:
 			rightCount = (Root->pRight != nullptr) ? count(Root->pRight) : 0;
 			return 1 + leftCount + rightCount;
 		}
-		return 0;
+		else return 0;
 	}
 
-	int sum(const Element* Root)
+	int sum(const Element* Root)const
 	{
 		int leftSum, rightSum;
 		if (Root != nullptr)
 		{
-			leftSum += (Root->pLeft != nullptr) ? sum(Root->pLeft) : 0;
-			rightSum += (Root->pRight != nullptr) ? sum(Root->pRight) : 0;
+			leftSum = (Root->pLeft != nullptr) ? sum(Root->pLeft) : 0;
+			rightSum = (Root->pRight != nullptr) ? sum(Root->pRight) : 0;
 			return Root->Data + leftSum + rightSum;
 		}
 		return 0;
 	}
 
-	void print(Element* Root)const
+	double avg(const Element* Root)const
 	{
-		if (Root == nullptr) return;
+		return ((double)sum(Root) / count(Root));
+	}
+
+	void clear(Element* Root)
+	{
+		if (Root != nullptr)
+		{
+			if (Root->pLeft != nullptr) clear(Root->pLeft);
+			if (Root->pRight != nullptr) clear(Root->pRight);
+			this->Root = nullptr;
+		}
+		else
+		{
+			cout << "Дерево уже и так пустое!" << endl;
+			return;
+		}
+	}
+
+	Element* erase(int Data, Element* Root)
+	{
+		if (this->Root == nullptr) return nullptr;
+		if (Root == nullptr) return Root;
+		if (Data == Root->Data)
+		{
+			Element* Temp;
+			if (Root->pRight == nullptr) Temp = Root->pLeft;
+			else
+			{
+				Element* element = Root->pRight;
+				if (element->pLeft == nullptr)
+				{
+					element->pLeft = Root->pLeft;
+					Temp = element;
+				}
+				else
+				{
+					Element* elementMin = element->pLeft;
+					while (elementMin->pLeft != nullptr)
+					{
+						element = elementMin;
+						elementMin = element->pLeft;
+					}
+					element->pLeft = elementMin->pRight;
+					elementMin->pLeft = Root->pLeft;
+					elementMin->pRight = Root->pRight;
+					Temp = elementMin;
+				}
+			}
+			Root = nullptr;
+			return Temp;
+		}
+		else if (Data < Root->Data)
+		{
+			Root->pLeft = erase(Data, Root->pLeft);
+		}
+		else Root->pRight = erase(Data, Root->pRight);
+
+		return Root;
+	}
+
+	int depth(const Element* Root)const
+	{
+		int leftDepth, rightDepth;
+		if (Root != nullptr)
+		{
+			leftDepth = (Root->pLeft != nullptr) ? depth(Root->pLeft) : 0;
+			rightDepth = (Root->pRight != nullptr) ? depth(Root->pRight) : 0;
+			return (leftDepth >= rightDepth) ? (1 + leftDepth) : (1 + rightDepth) ;
+		}
+		else return 0;
+	}
+
+	void print(const Element* Root)const
+	{
+		if (Root == nullptr)  return; 
 		print(Root->pLeft);
 		cout << Root->Data << tab;
 		print(Root->pRight);
 	}
+
+	
+	void printTree(Element* Root, int count)
+	{
+		if (Root == nullptr)  return;
+		
+		printTree(Root->pRight, count + 1);
+		
+		for (int i = 0; i < count; i++) cout << " ";
+		cout << Root->Data << endl;
+		
+		printTree(Root->pLeft, count + 1);
+	}
 };
 
-int static operator+(const std::Tree::Element& left, const Element& right)const
-{
-	return left.Data + right.Data;
-}
+
 
 void main()
 {
@@ -182,6 +216,21 @@ void main()
 	cout << "Минимальное значение в дереве: " << tree.minValue()->getData() << endl;
 	cout << "Максимальное значение в дереве: " << tree.maxValue()->getData() << endl;
 	cout << "Количество элементов в дереве: " << tree.count(tree.getRoot()) << endl;
-	cout << "Сумма элементов в дереве: " << tree.count(tree.getRoot()) << endl;
+	cout << "Сумма элементов в дереве: " << tree.sum(tree.getRoot()) << endl;
+	cout << "Среднее арифметическое элементов в дереве: " << tree.avg(tree.getRoot()) << endl;
+	cout << "Глубина дерева: " << tree.depth(tree.getRoot()) << endl;
+	//cout << "Вывод дерева как дерева: " << endl;
+	//tree.printTree(tree.getRoot(), tree.count(tree.getRoot()));
 
+
+	tree.erase(0, tree.getRoot());
+	cout << "Дерево после удаления узла '0':" << endl;
+	tree.print(tree.getRoot());
+	cout << endl;
+
+	
+	tree.clear(tree.getRoot());
+	cout << "Дерево после очистки:" << endl;
+	tree.print(tree.getRoot());
+	
 }
